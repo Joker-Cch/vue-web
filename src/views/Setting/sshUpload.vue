@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 style="padding-left: 100px; margin-bottom: 30px;">上传SSH</h2>
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm" style="width: 500px;">
+    <el-form :model="ruleForm" status-icon ref="ruleForm" label-width="100px" class="ruleForm" style="width: 500px;">
       <!--名称-->
       <el-form-item label="Name" prop="name">
         <el-input type="text" v-model="ruleForm.name" autocomplete="off"></el-input>
@@ -16,7 +16,7 @@
       </el-form-item>
       <!--提交-->
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button type="primary" @click="submitForm()">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -45,23 +45,16 @@ export default {
       ruleForm: {
         name: '',
         content: ''
-      },
-      rules: {
-        name: [
-          { validator: validateName, trigger: 'blur' }
-        ],
-        content: [
-          { validator: validateContent, trigger: 'blur' }
-        ]
       }
     }
   },
   methods: {
-    submitForm (formName) {
-      this.$axios({ method: 'post', url: '/api/secret/sshkey', data: formName }).then(res => {
+    submitForm () {
+      this.$axios({ method: 'post', url: '/api/secret/sshkey', data: this.ruleForm }).then(res => {
         if (res.status === 200) {
           console.log(res.data)
-          this.$router.push('/sshUpload')
+          alert(res.data.msg)
+          this.$router.push('/sshList')
         } else {
           console.log(res.data)
           alert(res.data.msg)

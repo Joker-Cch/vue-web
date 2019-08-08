@@ -82,6 +82,20 @@ export default {
     width: 300px;
     .el-submenu [class^=el-icon-] {
       font-size: 20px;
+      padding: 0 20px;
+      margin-right: 15px;
+    }
+    // .el-submenu .el-menu-item {
+    //   margin-left: 36px;
+    // }
+    // .el-menu-item:focus, .el-menu-item:hover {
+    //   background-color: !important;
+    // }
+    // .el-menu-item.is-active {
+    // color: #409EFF;
+    // }
+    .el-menu-item{
+      padding-left: 60px
     }
     .el-menu{
       height: 100%;
@@ -99,13 +113,13 @@ export default {
         height:auto;
         display:none; 
       }
-
     }
   }
   .content-container {
     flex:1;
     overflow-y: scroll;
     padding: 16px 30px 20px;
+    // box-shadow:0 0 3px #000;
     .content-wrapper {
       background-color: #fff;
       box-sizing: border-box;

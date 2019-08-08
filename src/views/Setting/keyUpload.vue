@@ -77,7 +77,7 @@ export default {
         console.log(res)
         if (res.status === 200) {
           console.log(res.data)
-          alert(res.data.msg)
+          alert(res.data.data)
           this.$router.push('/keyList')
         } else {
           console.log(res.data)

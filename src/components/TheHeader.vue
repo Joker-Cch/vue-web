@@ -43,19 +43,15 @@ export default {
   line-height: 60px;
   color:#fff;
   background-color: #232f3e;
-  border-style: solid;
-  border-color: #ccc;
-  border-width: 0 0 1px;
   text-shadow: 0 1px 0 #000;
   margin-bottom: 20px;
+  box-shadow:0 0 3px #000;
   overflow: hidden;
   .logo{
     width: 300px;
     height:60px;
     line-height: 60px;
     font-size: 18px;
-    // padding-left:20px;
-    // padding-right:20px;
     text-align: center;
   }
   .search{
