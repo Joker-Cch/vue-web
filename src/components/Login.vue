@@ -45,7 +45,7 @@ export default {
           var userToken = 'Bosi' + ' ' + res.data.data.token.toString()
           // 将用户token保存到vuex中
           _this.setToken({ Authorization: userToken });
-          _this.$router.push('/form');
+          _this.$router.push('/service');
         } else {
           console.log(res.data);
           alert(res.data.msg)

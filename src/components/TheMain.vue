@@ -27,6 +27,7 @@
             </li>
           </template>
         </ul>
+        
       </aside>
       <section class="content-container">
         <div class="grid-content bg-purple-light">

@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
-import Form from '../views/nav1/Form'
+import Service from '../views/Home/Service'
+import Region from '../views/Home/Region'
+import EKS from '../views/Service/EKS'
 import Page4 from '../views/nav2/Page4'
 import Page5 from '../views/nav2/Page5'
 import keyList from '../views/Setting/keyList'
@@ -22,10 +24,12 @@ const routes = [
   {
     path: '/',
     component: Home,
-    name: '首页',
+    name: 'AWS 资源',
     iconCls: 'el-icon-s-home',
     children: [
-      { path: '/form', component: Form, name: 'Form' }
+      { path: '/service', component: Service, name: '服务' },
+      { path: '/eks/home', component: EKS, name: 'EKS', hidden: true},
+      { path: '/region', component: Region, name: '区域' }
     ]
   },
   {
