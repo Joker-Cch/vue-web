@@ -1,0 +1,180 @@
+<template>
+  <div style="width:100%;">
+    <el-form :inline="true" :model="formInline">
+      <!-- <el-form :inline="true" :model="formInline" class="demo-form-inline"> -->
+      <!-- <el-form-item style="padding-left: 10px;">
+        <el-input v-model="search" style="display: inline-block; width: 350px" placeholder="请输入服务名称"></el-input>
+      </el-form-item> -->
+      <el-form-item style="padding-left: 10px;">
+        <el-input v-model="formInline.service" placeholder="请输入服务名称" style="width: 350px"></el-input>
+      </el-form-item>
+      <!-- <el-form-item style="padding-left: 30px;">
+        <el-input v-model="formInline.shortname" placeholder="请输入短名称" style="width: 200px"></el-input>
+      </el-form-item> -->
+      <!-- <el-form-item style="padding-left: 30px;">
+        <el-input v-model="search" style="display: inline-block; width: 200px" placeholder="请输入短名称"></el-input>
+      </el-form-item> -->
+      <!-- <el-form-item style="padding-left: 30px;">
+        <el-input v-model="formInline.region" placeholder="区域" style="width: 350px;"></el-input>
+        <el-select v-model="formInline.region" placeholder="活动区域" style="">
+          <el-option label="区域一" value="shanghai"></el-option>
+          <el-option label="区域二" value="beijing"></el-option>
+        </el-select>
+      </el-form-item> -->
+      <el-form-item style="padding-left: 30px;">
+        <el-button type="primary" @click="onSearch">查询</el-button>
+      </el-form-item>
+    <!-- </el-form> -->
+    </el-form>
+    <div>
+      <div>
+        <el-table ref="multipleTable" :data="tableData.slice((page-1)*limit,page*limit)" tooltip-effect="dark" style="width:50%; text-align: center;"
+          @selection-change="handleSelectionChange">
+          <el-table-column prop="name" label="服务名称"></el-table-column>
+          <el-table-column prop="shortname" label="简称"></el-table-column>
+          <el-table-column type="expand" label="区域">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <!-- <li v-for="item in props.row.region" :key="item.region" :value="item.name">{{ item.name }}</li> -->
+                <span v-for="item in props.row.region" :key="item.region" :value="item.name">{{ item.name }}</span> 
+                <!-- <p v-for="item in props.row.region" :key="item.region" :value="item.name">{{ item.name }}</p>  -->
+              </el-form>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="区域">
+            <template slot-scope="scope">
+              <span  v-for="item in scope.row.region" :key="item.region" :value="item.name">{{ item.name }}</span> 
+              <el-button v-for="item in scope.row.region" :key="item.region" :value="item.name">{{ item.region }}</el-button>
+                <el-select placeholder="请选择区域" @change="changeSelect(scope.row.name)" v-model="state[scope.row.name]">
+                    <el-option v-for="item in scope.row.region" :key="item.region" :value="item.name"></el-option>
+                </el-select>
+            </template>
+          </el-table-column> -->
+          <!-- <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button @click="handleEdit(scope.$index, scope.row)">创建</el-button>
+            </template>
+          </el-table-column> -->
+        </el-table>
+        <div style="text-align: center;margin-top: 30px;">
+          <el-pagination background layout="prev, pager, next" :total="total" @current-change="current_change"></el-pagination>
+        </div>
+      </div>
+
+      <div>
+        <el-table ref="multipleTable" :data="tableData.slice((page-1)*limit,page*limit)" tooltip-effect="dark" style="width:50%;"
+        @selection-change="handleSelectionChange">
+        <el-table-column prop="regionname" label="名称" width="300"></el-table-column>
+        <el-table-column prop="region" label="区域" width="300"></el-table-column>
+        <el-table-column prop="endpoint" label="终端节点" width="400"></el-table-column>
+        <!-- <el-table-column label="区域" width="300">
+          <template slot-scope="scope">
+              <el-select placeholder="请选择" @change="changeSelect(scope.row.name)" v-model="state[scope.row.name]">
+                  <el-option v-for="item in scope.row.region" :key="item.region" :value="item.name"></el-option>
+              </el-select>
+          </template>
+        </el-table-column> -->
+        <!-- <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button @click="handleEdit(scope.$index, scope.row)">创建</el-button>
+          </template>
+        </el-table-column> -->
+      </el-table>
+      <div style="text-align: center;margin-top: 30px;">
+        <el-pagination background layout="prev, pager, next" :total="total" @current-change="current_change"></el-pagination>
+      </div>
+      </div>
+
+    </div>
+
+  </div>
+</template>
+<script>
+import Vue from 'vue'
+import { type } from 'os';
+export default {
+  data () {
+    return {
+      tableData: [],
+      multipleSelection: [],
+      total: 0,
+      type: 'owner',
+      limit: 50,
+      state: {},
+      page: 1,
+      formInline: {
+        'service': ''
+        // 'shortname': '',
+      }
+    }
+  },
+  mounted () {
+    this.getList()
+  },
+  methods: {
+    onSearch() {
+      this.$axios({ method: 'get', url: '/api/service/aws/regionmap', params: this.formInline }).then(res => {
+        this.total = res.data.data.length
+        this.tableData = res.data.data
+        // console.log(res)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    getList () {
+      // 过滤搜索字段值为空的属性，然后对象合并，合并上页码。
+      let _this = this
+      this.$axios.get('/api/service/aws/regionmap', {
+        params: this.formInline
+      }).then(function (res) {
+        console.log(res)
+        _this.total = res.data.data.length
+        // _this.total = res.data.data.length * 2
+        _this.tableData = res.data.data
+      })
+    },
+    // filterParams (obj) {
+    //   let _form = obj, _newPar = {}, testStr
+    //   // 遍历对象
+    //   for (let key in _form) {
+    //     testStr = null
+    //     // 如果属性的值不为空。
+    //     // 注意，不要这样判断if (_form[key])。因为有些属性的值可能为0，到时候就会被过滤掉
+    //     if (_form[key] !== null && _form[key] !== '') {
+    //       // 把值添加进新对象里面
+    //       _newPar[key] = _form[key].toString()
+    //     }
+    //   }
+    //   // 返回对象
+    //   return _newPar
+    // },
+    // 选择器
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    current_change (page) {
+      this.page = page;
+    },
+    mounted () {
+        this.tableData.forEach(item => {
+        this.$set(this.state, item.name, '') // 父、  子、  子的赋值
+        })
+    },
+    changeSelect (name) {
+        console.log(name, this.state[name])
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+  .demo-table-expand span {
+    // text-align: center;
+    display: inline-block;
+    width: 195px;
+    // width: auto;
+    white-space: pre-wrap
+    // word-wrap: break-word;
+    // word-break: normal;
+  }
+</style>

@@ -3,10 +3,8 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 import Service from '../views/Home/Service'
-import Region from '../views/Home/Region'
+// import Region from '../views/Home/Region'
 import EKS from '../views/Service/EKS'
-import Page4 from '../views/nav2/Page4'
-import Page5 from '../views/nav2/Page5'
 import keyList from '../views/Setting/keyList'
 import keyUpload from '../views/Setting/keyUpload'
 import sshList from '../views/Setting/sshList'
@@ -24,22 +22,20 @@ const routes = [
   {
     path: '/',
     component: Home,
-    name: 'AWS 资源',
-    iconCls: 'el-icon-s-home',
+    name: '服务',
+    iconCls: 'el-icon-star-on',
     children: [
-      { path: '/service', component: Service, name: '服务' },
-      { path: '/eks/home', component: EKS, name: 'EKS', hidden: true},
-      { path: '/region', component: Region, name: '区域' }
+      { path: '/eks/home', component: EKS, name: 'EKS' }
     ]
   },
   {
     path: '/',
     component: Home,
-    name: '实例',
-    iconCls: 'el-icon-cpu',
+    name: 'AWS 资源',
+    iconCls: 'el-icon-s-home',
     children: [
-      { path: '/page4', component: Page4, name: 'VPC' },
-      { path: '/page5', component: Page5, name: '安全组' }
+      { path: '/service', component: Service, name: '服务' },
+      // { path: '/region', component: Region, name: '区域' }
     ]
   },
   {
@@ -73,16 +69,16 @@ const router = new Router({
 })
 
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    localStorage.removeItem('Authorization')
-  }
-  let token = localStorage.getItem('Authorization')
-  if (!token && to.path !== '/login') {
-    next({path: '/login'})
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.path === '/login') {
+//     localStorage.removeItem('Authorization')
+//   }
+//   let token = localStorage.getItem('Authorization')
+//   if (!token && to.path !== '/login') {
+//     next({path: '/login'})
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

@@ -8,10 +8,14 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/index.css'
 import axios from 'axios'
+import Qs from 'qs'
+// import JsEncrypt from 'jsencrypt'
+import JSEncrypt from 'jsencrypt/bin/jsencrypt'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
+Vue.prototype.$qs = Qs
 
 axios.defaults.timeout = 15000 // 超时时间
 axios.defaults.retry = 3 // 请求次数
@@ -42,7 +46,7 @@ axios.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
-          localStorage.removeItem('token')
+          localStorage.removeItem('Authorization')
           router.replace({
             path: '/login',
             query: {

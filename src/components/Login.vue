@@ -9,7 +9,7 @@
     </el-form-item>
     <!--<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>-->
     <el-form-item>
-      <el-button type="primary" style="width: 100%;" @click="login('loginForm')">登录</el-button>
+      <el-button type="primary" style="width: 100%;" @click="login()">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -41,6 +41,7 @@ export default {
       let _this = this;
       this.$axios({ method: 'post', url: '/api/user/login', data: _this.loginForm }).then(res => {
         if (res.status === 200) {
+          console.log(res)
           console.log(res.data);
           var userToken = 'Bosi' + ' ' + res.data.data.token.toString()
           // 将用户token保存到vuex中

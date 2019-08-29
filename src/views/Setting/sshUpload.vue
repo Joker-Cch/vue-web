@@ -22,6 +22,7 @@
   </div>
 </template>
 <script>
+import JSEncrypt from 'jsencrypt/bin/jsencrypt'
 export default {
   data () {
     var validateName = (rule, value, callback) => {
@@ -44,12 +45,19 @@ export default {
     return {
       ruleForm: {
         name: '',
-        content: ''
+        content: '',
+        user: ''
       }
     }
   },
   methods: {
     submitForm () {
+      let encryptor = new JSEncrypt()
+      let publicKey = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgA3wlPzKk0FNr4zqYeNKfEYOJH+thJB5W8KKeoU2nI8VU4uLOQ30o2XM3SfjCed8IrxqmheNzgFfWLkAB7AQrK+mEfq4ZDhAht1RbvVyo5Dze+B3liFkI2EHu6yd1muQEccMhDy4HKG44ijEX4z7IkIFQbsYoKdWCWoegYi+/tvhKbHDkYLP9lXFlbv5AZOWVKBGhS56uYdpe9QDHkdNEz1iEUvvW0fWYNSwSaGD++QzrUrFQgZvQSElcySrpXKZ4DdwbAMPt4c7PvRRsykA3BEj5jyDkYmKgApU3DETzXbzzdJJ8vfIG0JMtkg6r7/Z0pg3rE/36FtlJ+qLkuCp1QIDAQAB-----END PUBLIC KEY-----"
+      encryptor.setPublicKey(publicKey)
+      let rsaPassWord = encryptor.encrypt('djwnvpicnvpa')
+      console.log(rsaPassWord) 
+
       this.$axios({ method: 'post', url: '/api/secret/sshkey', data: this.ruleForm }).then(res => {
         if (res.status === 200) {
           console.log(res.data)

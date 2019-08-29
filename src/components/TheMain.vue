@@ -1,9 +1,9 @@
 <template>
     <el-col :span="24" class="main">
-      <aside :class="collapsed?'menu-collapsed' : 'menu-expanded'">
+      <el-col :span="4" :class="collapsed?'menu-collapsed':'menu-expanded'" class="aside">
         <!--导航菜单-->
-        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect"
-                 unique-opened router v-show="!collapsed">
+        <el-menu :default-active="$route.path" class="el-menu-vertica" @open="handleOpen" @close="handleClose" @select="handleSelect"
+                unique-opened router v-show="!collapsed">
           <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
             <el-submenu :index="index+''" v-if="!item.leaf" :key="index">
               <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
@@ -14,30 +14,27 @@
         </el-menu>
 
         <ul v-show="collapsed" class="el-menu collapsed" ref="menuCollapsed" >
-          <template v-for="(item,index) in $router.options.routes" v-if="item.menuShow">
+          <template v-for="(item,index) in $router.options.routes">
             <li v-if="!item.leaf" :index="index+''" style="position: relative;" :key="index">
               <div class="el-submenu__title" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
               <ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
-                <li v-for="term in item.children" :key="term.path" v-if="term.menuShow" class="el-menu-item" :class="$route.path==term.path?'is-active':''"
+                <li class="el-menu-item" v-for="term in item.children" :key="term.path" :class="$route.path==term.path?'is-active':''"
                     @click="$router.push(term.path)">{{term.name}}</li>
-              </ul>
+              </ul> 
             </li>
             <li v-else-if="item.leaf&&item.children&&item.children.length" class="el-menu-item el-submenu__title" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].path)" :key="index">
               <i :class="item.iconCls"></i>
             </li>
           </template>
         </ul>
-        
-      </aside>
-      <section class="content-container">
-        <div class="grid-content bg-purple-light">
-          <el-col :span="24" class="content-wrapper">
-            <transition name="fade" mode="out-in">
-              <router-view></router-view>
-            </transition>
-          </el-col>
-        </div>
-      </section>
+      </el-col>
+      
+      <el-col class="section" :span="20" >
+        <transition name="fade" mode="out-in">
+          <router-view></router-view>
+        </transition>
+      </el-col>
+
     </el-col>
 </template>
 
@@ -51,6 +48,7 @@ export default {
   },
   mounted () {
     // 初始化
+    // document.getElementsByClassName('el-menu-item')[0].style.paddingLeft = 0
   },
   methods: {
     handleOpen () {
@@ -78,53 +76,25 @@ export default {
   bottom: 0px;
   padding-bottom: 50px;
   overflow: hidden;
-  aside {
-    flex:0 0 300px;
-    width: 300px;
-    .el-submenu [class^=el-icon-] {
-      font-size: 20px;
-      padding: 0 20px;
-      margin-right: 15px;
-    }
-    // .el-submenu .el-menu-item {
-    //   margin-left: 36px;
-    // }
-    // .el-menu-item:focus, .el-menu-item:hover {
-    //   background-color: !important;
-    // }
-    // .el-menu-item.is-active {
-    // color: #409EFF;
-    // }
-    .el-menu-item{
-      padding-left: 60px
-    }
-    .el-menu{
+  .aside {
+    height: 100%;
+    .el-menu-vertica{
       height: 100%;
     }
-    .collapsed{
-      width:60px;
-      .item{
-        position: relative;
-      }
-      .submenu{
-        position:absolute;
-        top:0px;
-        left:60px;
-        z-index:99999;
-        height:auto;
-        display:none; 
-      }
+    .el-submenu [class^=el-icon-] {
+      font-size: 20px;
+      margin-right: 15px;
     }
   }
-  .content-container {
+  .section {
     flex:1;
     overflow-y: scroll;
-    padding: 16px 30px 20px;
-    // box-shadow:0 0 3px #000;
-    .content-wrapper {
-      background-color: #fff;
-      box-sizing: border-box;
-    }
+    padding: 5px 25px;
+    // -webkit-box-shadow: #666 0px 0px 10px;
+    // -moz-box-shadow: #666 0px 0px 10px;
+    // box-shadow: #666 0px 0px 10px;
+    // background: #EEFF99;
+
   }
 }
 </style>

@@ -1,117 +1,170 @@
 <template>
-  <div>
-    <div style="padding-bottom: 10px;"><span>计算机</span></div>
-    <ul>
-      <li><router-link to="/eks/home"><a>EKS</a></router-link></li>
-    </ul>
-    <!-- <a href="/eks/home"></a>
-    <el-table ref="multipleTable" :data="tableData.slice((page-1)*limit,page*limit)" tooltip-effect="dark" style="width: 100%"
-      @selection-change="handleSelectionChange">
-      <el-table-column prop="name" label="服务名称" width="400"></el-table-column>
-      <el-table-column prop="shortname" label="简称" width="200"></el-table-column>
-      <ul>
-        <li>
-          <a class="" target="_self" 
-          href="https://cn-northwest-1.console.amazonaws.cn/ec2/v2/home?region=cn-northwest-1" 
-          data-service-id="ec2" title="云中的虚拟服务器" 
-          data-reactid=".0.0.0.2.1.$collapsible-section-items.0.$category-column-0.$category-0.1.1.$0.0">
-          <span class="service-name" 
-          data-reactid=".0.0.0.2.1.$collapsible-section-items.0.$category-column-0.$category-0.1.1.$0.0.0">EC2</span>
-          </a>
-        </li>
-      </ul>
+  <el-row>
+    <!-- 服务表格 -->
+    <el-col :md="10" :xl="9" :sm="24" :xs="24" :lg="10">
+      <!-- 搜索栏 -->
+      <el-col class="search">
+        <span class="title">服务</span>
+        <el-form :inline="true" :model="serviceSearch" style="display: inline;">
+          <el-form-item style="padding-left: 10px;">
+            <el-input v-model="serviceSearch.service" placeholder="请输入服务名称" style="width: auto; line-height: 65px;"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="onSearch">查询</el-button>
+        </el-form>
+      </el-col>
+      <!-- 表格 -->
+      <el-col>
+        <!-- <el-table ref="multipleTable" :data="serviceData.slice((page-1)*limit, page*limit)" tooltip-effect="dark"
+          @selection-change="handleSelectionChange"> -->
+        <!-- <el-table ref="multipleTable" :data="serviceData" tooltip-effect="dark" :size="small"> -->
+        <el-table size="medium" ref="multipleTable" :data="serviceData">
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline>
+                <span v-for="item in props.row.region" :key="item.region" :value="item.name">{{ item.name + " " }}</span> 
+              </el-form>
+            </template>
+          </el-table-column>
 
-      <el-table-column label="区域" width="300">
-        <template slot-scope="scope">
-            <el-select placeholder="请选择" @change="changeSelect(scope.row.name)" v-model="state[scope.row.name]">
-                <el-option v-for="item in scope.row.region" :key="item.region" :value="item.name"></el-option>
-            </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button @click="handleEdit(scope.$index, scope.row)">创建</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="text-align: center;margin-top: 30px;">
-      <el-pagination background layout="prev, pager, next" :total="total" @current-change="current_change"></el-pagination>
-    </div> -->
-  </div>
+          <el-table-column prop="name" label="服务名称" width="380px;"></el-table-column>
+          <el-table-column prop="shortname" label="简称" width="100px;"></el-table-column>
+          <!-- <el-table-column type="expand" label="区域">
+            <template slot-scope="props">
+              <el-form label-position="left" inline>
+                <span v-for="item in props.row.region" :key="item.region" :value="item.name">{{ item.name + " " }}</span> 
+              </el-form>
+            </template>
+          </el-table-column> -->
+        </el-table>
+        <!-- 页码 -->
+        <!-- <div style="text-align: center;margin-top: 30px; overflow: hidden; ">
+          <el-pagination background layout="prev, pager, next" :total="total" @current-change="current_change"></el-pagination>
+        </div> -->
+      </el-col>
+    </el-col>
+
+    <!-- 区域表格 -->
+    <el-col :md="12" :xl="15" :sm="24" :xs="24" :lg="14">
+      <span class="title">终端节点</span>
+      <!-- <el-table ref="multipleTable" :data="regionData.slice((page-1)*limit,page*limit)" tooltip-effect="dark" 
+      @selection-change="handleSelectionChange" v-for="item in regionData" :key="item.regionname" :value="item.endpoint"> -->
+      <el-row>
+        <el-col v-for="item in regionData" :key="item.index" :md="24" :sm="24" :lg="8">
+          <!-- <div :body-style="{padding:'10px'}"> -->
+          <div style="padding: 10px; color: dimgray;">
+            <el-row>
+              {{ item.region }}
+            </el-row>
+            <el-row>
+              {{ item.regionname }}
+            </el-row>
+            <el-row>
+              {{ item.endpoint }}
+            </el-row>
+          </div>
+        </el-col>
+      </el-row>
+        <!-- <el-table-column prop="regionname" label="名称" width="220px;"></el-table-column>
+        <el-table-column prop="region" label="区域" width="200px;"></el-table-column>
+        <el-table-column prop="endpoint" label="终端节点"></el-table-column> -->
+      <!-- </el-table> -->
+    </el-col>
+
+  </el-row>
 </template>
+
 <script>
 import Vue from 'vue'
 import { type } from 'os';
 export default {
   data () {
     return {
-      tableData: [],
-      multipleSelection: [],
-      total: 0,
+      regionData: [],
+      serviceData: [],
       type: 'owner',
-      limit: 10,
-      state: {},
+      limit: 50,
       page: 1,
-      keyForm: {
-        'service': '',
-        'shortname': '',
+      serviceSearch: {
+        'service': ''
       }
     }
   },
   mounted () {
-    this.getList()
+    this.serviceList()
+    this.regionList ()
   },
   methods: {
-    getList () {
-      // 过滤搜索字段值为空的属性，然后对象合并，合并上页码。
-      let _par = Object.assign(this.filterParams(this.keyFrom), {
-        service: this.service,
-        shortname: this.shortname,
-      })
-      let _this = this
-      this.$axios.get('/api/service/aws/regionmap', {
-        params: _par
-      }).then(function (res) {
-        console.log(res)
-        _this.total = res.data.data.length
-        // _this.total = res.data.data.length * 2
-        _this.tableData = res.data.data
-      })
-    },
-    filterParams (obj) {
-      let _form = obj, _newPar = {}, testStr
-      // 遍历对象
-      for (let key in _form) {
-        testStr = null
-        // 如果属性的值不为空。
-        // 注意，不要这样判断if (_form[key])。因为有些属性的值可能为0，到时候就会被过滤掉
-        if (_form[key] !== null && _form[key] !== '') {
-          // 把值添加进新对象里面
-          _newPar[key] = _form[key].toString()
-        }
-      }
-      // 返回对象
-      return _newPar
-    },
-    // 选择器
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
-    current_change (page) {
-      this.page = page;
-    },
-    mounted () {
-        this.tableData.forEach(item => {
-        this.$set(this.state, item.name, '') // 父、  子、  子的赋值
-        })
-    },
-    changeSelect (name) {
-        console.log(name, this.state[name])
-    }
 
+    // 查询列表
+    onSearch() {
+      this.$axios({ method: 'get', url: '/api/service/aws/regionmap', params: this.serviceSearch }).then(res => {
+        this.total = res.data.data.length
+        this.serviceData = res.data.data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    // 服务列表
+    serviceList () {
+      this.$axios({ method: 'get', url: '/api/service/aws/regionmap', params: this.serviceSearch }).then(res => {
+      // this.$axios.get('/api/service/aws/regionmap', { params: this.serviceSearch }).then(function (res) {
+        // console.log(res)
+        this.total = res.data.data.length
+        // _this.total = res.data.data.length * 2
+        this.serviceData = res.data.data
+      })
+    },
+
+    // 区域列表
+    regionList () {
+      this.$axios({ method: 'get', url: '/api/service/aws/regioninfo', params: {} }).then(res => {
+      // this.$axios.get('/api/service/aws/regionmap', { params: this.serviceSearch }).then(function (res) {
+        // console.log(res)
+        this.total = res.data.data.length
+        // _this.total = res.data.data.length * 2
+        this.regionData = res.data.data
+        // console.log(this.regionData)
+      })
+    },
+
+
+    // handleSelectionChange (val) {
+    //   this.multipleSelection = val
+    // },
+    // current_change (page) {
+    //   this.page = page;
+    // },
+    // mounted () {
+    //     this.serviceData.forEach(item => {
+    //     this.$set(this.state, item.name, '') // 父、  子、  子的赋值
+    //     })
+    // }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.search {
+  overflow: hidden; 
+  white-space:nowrap; 
+  height: 65px; 
+  line-height: 65px;
+
+}
+.title{
+  padding-left: 10px;
+  height: 65px; 
+  line-height: 65px;
+  color: dimgray
+}
+
+  .demo-table-expand span {
+    // text-align: center;
+    display: inline-block;
+    width: 195px;
+    // width: auto;
+    white-space: pre-wrap
+    // word-wrap: break-word;
+    // word-break: normal;
+  }
 </style>

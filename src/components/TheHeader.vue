@@ -1,8 +1,8 @@
 <template>
     <el-col class="header">
-      <el-col class="logo"><img src="../assets/logo.png" style="width: 60px"></el-col>
-      <el-col :span="12" class="search"></el-col>
-      <el-col :span="6" class="info">
+      <el-col :span="4" class="logo"><img src="../assets/logo.png" style="width: 60px"></el-col>
+      <el-col :span="16" class="search"></el-col>
+      <el-col :span="4" class="info">
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link user-info">{{sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
@@ -57,18 +57,15 @@ export default {
   box-shadow:0 0 3px #000;
   overflow: hidden;
   .logo{
-    width: 300px;
     height:60px;
     line-height: 60px;
     font-size: 18px;
     text-align: center;
   }
   .search{
-    width: 780px;
     height: 60px;
   }
   .info {
-    // width: 180px;
     height: 60px;
     font-size: 12px;
     text-align: center;
