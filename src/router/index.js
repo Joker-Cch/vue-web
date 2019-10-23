@@ -4,7 +4,12 @@ import Login from '@/components/Login'
 import Home from '@/components/Home'
 import Service from '../views/Home/Service'
 // import Region from '../views/Home/Region'
-import EKS from '../views/Service/EKS'
+import eksHome from '../views/Service/EKS/eksHome'
+import eksCreate from '../views/Service/EKS/eksCreate'
+import eksInfo from '../views/Service/EKS/eksInfo'
+import modelHome from '../views/Service/CloudFormation/modelHome'
+import modelCreate from '../views/Service/CloudFormation/modelCreate'
+import modelInfo from '../views/Service/CloudFormation/modelInfo'
 import keyList from '../views/Setting/keyList'
 import keyUpload from '../views/Setting/keyUpload'
 import sshList from '../views/Setting/sshList'
@@ -25,7 +30,12 @@ const routes = [
     name: '服务',
     iconCls: 'el-icon-star-on',
     children: [
-      { path: '/eks/home', component: EKS, name: 'EKS' }
+      { path: '/eks/home', component: eksHome, name: 'EKS' },
+      { path: '/eks/create', component: eksCreate, name: '创建EKS', hidden: true },
+      { path: '/eks/info/:id', component: eksInfo, name: 'Info', hidden: true },
+      { path: '/cloudformation/home', component: modelHome, name: 'CloudFormation' },
+      { path: '/cloudformation/create', component: modelCreate, name: '上传CloudFormation模版', hidden: true },
+      { path: '/cloudformation/info/:id', component: modelInfo, name: 'Info', hidden: true },
     ]
   },
   {

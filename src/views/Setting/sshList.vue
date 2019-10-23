@@ -42,12 +42,6 @@ export default {
   },
   methods: {
     getList () {
-      // 过滤搜索字段值为空的属性，然后对象合并，合并上页码。
-      // let _par = Object.assign(this.filterParams(this.keyFrom), {
-      //   type: this.type,
-      //   limit: this.limit,
-      //   page: this.page
-      // })
       let _this = this
       this.$axios.get('/api/secret/sshkey', {
         params: this.keyForm
@@ -58,21 +52,6 @@ export default {
         _this.tableData = res.data.data
       })
     },
-    // filterParams (obj) {
-    //   let _form = obj, _newPar = {}, testStr
-    //   // 遍历对象
-    //   for (let key in _form) {
-    //     testStr = null
-    //     // 如果属性的值不为空。
-    //     // 注意，不要这样判断if (_form[key])。因为有些属性的值可能为0，到时候就会被过滤掉
-    //     if (_form[key] !== null && _form[key] !== '') {
-    //       // 把值添加进新对象里面
-    //       _newPar[key] = _form[key].toString()
-    //     }
-    //   }
-    //   // 返回对象
-    //   return _newPar
-    // },
     // 选择器
     handleSelectionChange (val) {
       this.multipleSelection = val

@@ -61,11 +61,9 @@ export default {
       this.$axios({ method: 'post', url: '/api/secret/sshkey', data: this.ruleForm }).then(res => {
         if (res.status === 200) {
           console.log(res.data)
-          alert(res.data.msg)
           this.$router.push('/sshList')
         } else {
           console.log(res.data)
-          alert(res.data.msg)
         }
       }).catch(error => {
         console.log(error)

@@ -106,7 +106,7 @@ export default {
     },
     // 服务列表
     serviceList () {
-      this.$axios({ method: 'get', url: '/api/service/aws/regionmap', params: this.serviceSearch }).then(res => {
+      this.$axios({ method: 'get', url: '/api/service/aws/regionmap', params: {} }).then(res => {
       // this.$axios.get('/api/service/aws/regionmap', { params: this.serviceSearch }).then(function (res) {
         // console.log(res)
         this.total = res.data.data.length

@@ -26,58 +26,32 @@
   </div>
 </template>
 <script>
+import JSEncrypt from 'jsencrypt/bin/jsencrypt'
 export default {
   data () {
-    // var validateName = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请输入密钥名字'))
-    //   } else {
-    //     if (this.ruleForm.name !== '') {
-    //       this.$refs.ruleForm.validateField('name')
-    //     }
-    //     callback()
-    //   }
-    // }
-    // var validateID = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请输入密钥ID'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
-    // var validateSec = (rule, value, callback) => {
-    //   if (!value) {
-    //     return callback(new Error('密钥不能为空'))
-    //   }
-    // }
     return {
       ruleForm: {
         name: '',
         aws_key: '',
-        aws_secret: ''
+        aws_secret: '',
         // allow_users: null
       }
-      // rules: {
-      //   name: [
-      //     { validator: validateName, trigger: 'blur' }
-      //   ],
-      //   id: [
-      //     { validator: validateID, trigger: 'blur' }
-      //   ],
-      //   secret: [
-      //     { validator: validateSec, trigger: 'blur' }
-      //   ]
-      // }
     }
   },
   methods: {
     submitForm () {
-      console.log(this.ruleForm)
+      let encryptor = new JSEncrypt()
+      let publicKey = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgA3wlPzKk0FNr4zqYeNKfEYOJH+thJB5W8KKeoU2nI8VU4uLOQ30o2XM3SfjCed8IrxqmheNzgFfWLkAB7AQrK+mEfq4ZDhAht1RbvVyo5Dze+B3liFkI2EHu6yd1muQEccMhDy4HKG44ijEX4z7IkIFQbsYoKdWCWoegYi+/tvhKbHDkYLP9lXFlbv5AZOWVKBGhS56uYdpe9QDHkdNEz1iEUvvW0fWYNSwSaGD++QzrUrFQgZvQSElcySrpXKZ4DdwbAMPt4c7PvRRsykA3BEj5jyDkYmKgApU3DETzXbzzdJJ8vfIG0JMtkg6r7/Z0pg3rE/36FtlJ+qLkuCp1QIDAQAB-----END PUBLIC KEY-----"
+      encryptor.setPublicKey(publicKey)
+      this.ruleForm.aws_key = encryptor.encrypt(this.ruleForm.aws_key)
+      this.ruleForm.aws_secret = encryptor.encrypt(this.ruleForm.aws_secret)
+      // console.log(this.ruleForm.aws_key)
+      // console.log(this.ruleForm.aws_secret)
+      // console.log(this.ruleForm)
       this.$axios({ method: 'post', url: '/api/secret', data: this.ruleForm }).then(res => {
         console.log(res)
         if (res.status === 200) {
           console.log(res.data)
-          alert(res.data.data)
           this.$router.push('/keyList')
         } else {
           console.log(res.data)
