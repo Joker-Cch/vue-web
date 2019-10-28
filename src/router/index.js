@@ -14,6 +14,10 @@ import keyList from '../views/Setting/keyList'
 import keyUpload from '../views/Setting/keyUpload'
 import sshList from '../views/Setting/sshList'
 import sshUpload from '../views/Setting/sshUpload'
+import userList from '../views/Setting/userList'
+import userUpload from '../views/Setting/userUpload'
+import roleList from '../views/Setting/roleList'
+import roleUpload from '../views/Setting/roleUpload'
 
 Vue.use(Router)
 
@@ -54,10 +58,14 @@ const routes = [
     name: '设置',
     iconCls: 'el-icon-setting',
     children: [
+      { path: '/userList', component: userList, name: '用户' },
+      { path: '/userUpload', component: userUpload, name: '创建用户', hidden: true },
+      { path: '/roleList', component: roleList, name: '角色' },
+      { path: '/roleUpload', component: roleUpload, name: '创建角色', hidden: true },
       { path: '/keyList', component: keyList, name: '密钥对' },
       { path: '/keyUpload', component: keyUpload, name: '上传密钥对', hidden: true },
       { path: '/sshList', component: sshList, name: 'SSH Key' },
-      { path: '/sshUpload', component: sshUpload, name: '上传SSH', hidden: true }
+      { path: '/sshUpload', component: sshUpload, name: '上传SSH', hidden: true },
     ]
   },
   // {
